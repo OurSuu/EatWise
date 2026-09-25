@@ -20,6 +20,7 @@ export interface RestaurantSuggestion {
   name: string;
   travelTime: string;
   note: string;
+  mapUrl?: string;
 }
 
 export interface MealOption {

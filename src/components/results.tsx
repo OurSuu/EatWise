@@ -118,7 +118,8 @@ export default function Results({ data, userProfile, currentRequest, onRegenerat
                         const note = typeof r === 'object' ? r.note : '';
                         
                         // ค้นหาด้วยชื่อร้านเป๊ะๆ ไปเลย จะได้ขึ้นปักหมุดพร้อมข้อมูลร้าน
-                        const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spotName + ' ' + (currentRequest.area || 'Bangkok'))}`;
+                        const fallbackUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spotName + ' ' + (currentRequest.area || 'Bangkok'))}`;
+                        const searchUrl = typeof r === 'object' && 'mapUrl' in r && r.mapUrl ? r.mapUrl : fallbackUrl;
 
                         return (
                           <div key={rIdx} className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col gap-1.5">
