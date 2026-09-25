@@ -2,6 +2,7 @@ import React from 'react';
 import { Clock, Coins, Flame, Store, MapPin, RotateCcw, Star, ExternalLink } from 'lucide-react';
 import ChefMango from './chef-mango';
 import { MealRequest, RecommendationResult, UserProfile } from '@/types';
+import { buildMapsSearchUrl } from '@/lib/maps';
 
 interface ResultsProps {
   data: RecommendationResult;
@@ -12,6 +13,39 @@ interface ResultsProps {
 }
 
 export default function Results({ data, userProfile, currentRequest, onRegenerate, onEditSearch }: ResultsProps) {
+  if (data.status === 'error' || !data.options?.length) {
+    return (
+      <div className="max-w-2xl mx-auto p-4 md:p-6">
+        <ChefMango
+          mood="sad"
+          message={`Sorry ${userProfile?.name || ''}... I couldn't cook up options this time.`}
+          userName={userProfile?.name}
+          size="lg"
+        />
+        <div className="mt-6 bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-red-200 dark:border-red-900 shadow-lg">
+          <h3 className="text-xl font-black text-zinc-900 dark:text-zinc-100 mb-2">Couldn't generate meals</h3>
+          <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            {data.message || 'The AI is busy or the quota is full. Wait a moment and try again.'}
+          </p>
+          <div className="mt-6 flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={onRegenerate}
+              className="px-6 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-lg shadow-orange-500/30 transition-all flex items-center justify-center gap-2"
+            >
+              <RotateCcw size={18} /> Try again
+            </button>
+            <button
+              onClick={onEditSearch}
+              className="px-6 py-3.5 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 font-bold rounded-2xl hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+            >
+              Edit Situation
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-5xl mx-auto p-4 md:p-6">
       <ChefMango
@@ -117,9 +151,9 @@ export default function Results({ data, userProfile, currentRequest, onRegenerat
                         const travel = typeof r === 'object' ? r.travelTime : '~5 mins away';
                         const note = typeof r === 'object' ? r.note : '';
                         
-                        // ค้นหาด้วยชื่อร้านเป๊ะๆ ไปเลย จะได้ขึ้นปักหมุดพร้อมข้อมูลร้าน
-                        const fallbackUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spotName + ' ' + (currentRequest.area || 'Bangkok'))}`;
-                        const searchUrl = typeof r === 'object' && 'mapUrl' in r && r.mapUrl ? r.mapUrl : fallbackUrl;
+                        const searchUrl =
+                          (typeof r === 'object' && r.mapUrl) ||
+                          buildMapsSearchUrl(spotName, currentRequest.area || 'Bangkok');
 
                         return (
                           <div key={rIdx} className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col gap-1.5">

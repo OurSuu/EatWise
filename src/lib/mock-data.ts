@@ -13,31 +13,26 @@ export const generateRecommendations = async (
       body: JSON.stringify({ profile, request }),
     });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || 'Failed to fetch recommendations');
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok || !data || data.status === 'error') {
+      return {
+        status: 'error',
+        message: data?.message || 'Failed to fetch recommendations',
+        options: [],
+      };
     }
 
-    const data = await res.json();
-    return data;
+    return {
+      status: 'success',
+      options: Array.isArray(data.options) ? data.options : [],
+    };
   } catch (error) {
     console.error('Error generating recommendations:', error);
-    // Return a fallback error state
     return {
       status: 'error',
-      options: [
-        {
-          medal: '❌',
-          name: 'Error connecting to AI',
-          cost: 0,
-          time: 0,
-          cook: 'Yes',
-          ingredients: '-',
-          nutrition: { cals: 0, p: 0, c: 0, f: 0 },
-          explanation: error instanceof Error ? error.message : 'Unknown error occurred. Please try again.',
-          restaurants: [],
-        },
-      ],
+      message: error instanceof Error ? error.message : 'Unknown error occurred. Please try again.',
+      options: [],
     };
   }
 };

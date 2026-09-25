@@ -49,6 +49,7 @@ export interface MealRequest {
 
 export interface RecommendationResult {
   status: string;
+  message?: string;
   options: MealOption[];
 }
 
