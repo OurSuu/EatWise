@@ -1,0 +1,25 @@
+-- SQL Commands for Neon Database SQL Editor
+-- Create the User table
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create the Profile table
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  gender VARCHAR(50) DEFAULT 'Man',
+  age VARCHAR(50) DEFAULT '',
+  height VARCHAR(50) DEFAULT '',
+  weight VARCHAR(50) DEFAULT '',
+  lifestyle VARCHAR(255) DEFAULT '',
+  targets TEXT[] DEFAULT '{}',
+  default_location VARCHAR(255) DEFAULT '',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

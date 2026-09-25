@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes mango-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes mango-curious {
+  0%, 100% { transform: rotate(8deg); }
+  50% { transform: rotate(16deg); }
+}
+@keyframes mango-thinking {
+  0% { transform: rotate(-5deg) scale(1); }
+  50% { transform: rotate(5deg) scale(1.06); }
+  100% { transform: rotate(-5deg) scale(1); }
+}
+@keyframes mango-excited {
+  0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+  20% { transform: translateY(-14px) scale(1.1) rotate(-8deg); }
+  60% { transform: translateY(-14px) scale(1.1) rotate(8deg); }
+}
+@keyframes mango-sad {
+  0% { transform: scaleY(1) translateY(0); }
+  100% { transform: scaleY(0.92) translateY(6px) rotate(-4deg); }
+}
+@keyframes star-hop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3) rotate(15deg); }
+  100% { transform: scale(1); }
+}
+
+.mood-idle { animation: mango-idle 3s ease-in-out infinite; }
+.mood-curious { animation: mango-curious 2.5s ease-in-out infinite; }
+.mood-thinking { animation: mango-thinking 0.9s ease-in-out infinite; }
+.mood-excited { animation: mango-excited 1.2s ease-in-out infinite; }
+.mood-sad { animation: mango-sad 2s ease-in-out forwards; }
+.animate-star-hop { animation: star-hop 0.3s ease-out; }
