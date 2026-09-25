@@ -40,32 +40,33 @@ The user wants meal recommendations based on these constraints:
 
 Generate exactly 3 meal options (Option 1, Option 2, Option 3) that fit these criteria.
 Return ONLY a valid JSON array of 3 objects with no markdown wrapping and no backticks.
+
+CRITICAL RULES:
+1. ALL OUTPUT MUST BE STRICTLY IN ENGLISH ONLY. Do not use any Thai characters.
+2. If method='buy' or 'either', you MUST provide REAL, EXISTING, and VERIFIED restaurants that can be found on Google Maps near the given Location. DO NOT invent, hallucinate, or guess restaurant names. Use famous, well-known, or verified local restaurants that match the food type and budget.
+3. If method='cook', all options MUST have cook='Yes' and restaurants=[]. Strictly use ONLY the provided Available Ingredients!
+4. Strictly respect the budget and time limits.
+5. Provide the output as a RAW JSON array ONLY.
+
 Schema for each object:
 {
   "medal": "string (emoji like 🥇, 🥈, 🥉)",
-  "name": "string (Meal name in English or Thai)",
+  "name": "string (Meal name in English only)",
   "cost": number (estimated cost in THB),
   "time": number (estimated time in minutes),
   "cook": "string ('Yes' for home-cooked, 'No' for restaurant/buy)",
   "ingredients": "string (Key ingredients if cooking, or Food Style if buying)",
   "nutrition": { "cals": number, "p": number, "c": number, "f": number },
-  "explanation": "string (Why you recommend this in a friendly tone)",
+  "explanation": "string (Why you recommend this in a friendly tone, in English only)",
   "restaurants": [
     {
-      "name": "string (Real or highly plausible restaurant name near the Location. Use a specific name!)",
+      "name": "string (The EXACT real name of the restaurant as it appears on Google Maps)",
       "travelTime": "string (e.g., '10 mins walk')",
-      "note": "string (Short description)",
-      "mapUrl": "string (Generate a Google Maps search URL like: https://www.google.com/maps/search/?api=1&query=RestaurantName+Location)"
+      "note": "string (Short description of why it fits)",
+      "mapUrl": "string (Generate a Google Maps search URL exactly like this: https://www.google.com/maps/search/?api=1&query=EXACT_RESTAURANT_NAME_AND_LOCATION)"
     }
   ] // Empty array [] if "cook" is "Yes". MUST have 1-2 items if "cook" is "No".
 }
-
-IMPORTANT RULES:
-1. If method='cook', all 3 options MUST have cook='Yes' and restaurants=[]. Strictly use the provided Available Ingredients!
-2. If method='buy', all 3 options MUST have cook='No' and restaurants MUST contain 1-2 real restaurant suggestions near the Location.
-3. If method='either', provide a mix (e.g., 2 cook and 1 buy, or 1 cook and 2 buy).
-4. Strictly respect the budget and time limits.
-5. Provide the output as a RAW JSON array ONLY.
 `;
 
     const response = await ai.models.generateContent({
