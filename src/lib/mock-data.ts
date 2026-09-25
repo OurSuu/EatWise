@@ -34,7 +34,7 @@ export const generateRecommendations = async (
           cook: 'Yes',
           ingredients: '-',
           nutrition: { cals: 0, p: 0, c: 0, f: 0 },
-          explanation: 'Please check your API keys in .env.local',
+          explanation: error instanceof Error ? error.message : 'Unknown error occurred. Please try again.',
           restaurants: [],
         },
       ],
